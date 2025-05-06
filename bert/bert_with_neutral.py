@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup # MODIFIED
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
 from torch.optim import AdamW
 import numpy as np
 import os
@@ -15,7 +15,6 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
-# Download necessary NLTK data (if not already downloaded)
 try:
     stopwords.words('english')
 except LookupError:
@@ -29,51 +28,39 @@ try:
 except LookupError:
     nltk.download('wordnet')
 try:
-    # Check for punkt_tab directly
     nltk.data.find('tokenizers/punkt_tab')
 except LookupError:
     nltk.download('punkt_tab')
 
 
-# Configuration
 MODEL_NAME = "google-bert/bert-base-uncased"
-NUM_LABELS = 3  # bad, neutral, good
-BATCH_SIZE = 16 # Adjust based on your GPU memory
-EPOCHS = 3 # Adjust as needed
-MAX_LEN = 128 # Max sequence length for BERT
+NUM_LABELS = 3
+BATCH_SIZE = 16
+EPOCHS = 3
+MAX_LEN = 128
 LEARNING_RATE = 2e-5
 RANDOM_STATE = 42
 
-# Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Load the dataset
 csv_file_name = "tripadvisor_hotel_reviews.csv"
 if not os.path.exists(csv_file_name):
     print(f"Error: {csv_file_name} not found. Please ensure the dataset is in the same directory.")
     exit()
 
-df = pd.read_csv(csv_file_name, on_bad_lines='skip') # MODIFIED
+df = pd.read_csv(csv_file_name, on_bad_lines='skip')
 print("Dataset loaded successfully.")
 
-# Preprocessing
 df.dropna(subset=['Review', 'Rating'], inplace=True)
 
-# Initialize lemmatizer and stopwords
 lemmatizer = WordNetLemmatizer()
-stop_words_nltk = set(stopwords.words('english')) # Renamed to avoid conflict if 'stopwords' is used elsewhere
+stop_words_nltk = set(stopwords.words('english'))
 
 def preprocess_text_bert(text):
-    # Convert to lowercase
     text = text.lower()
-    # Remove special characters and punctuation - BERT might handle some, but cleaning helps consistency
-    text = re.sub(r'[^a-z0-9\s]', '', text) # Kept numbers as BERT might use them
-    # Tokenize text
+    text = re.sub(r'[^a-z0-9\s]', '', text)
     tokens = word_tokenize(text)
-    # Remove stop words and lemmatize
-    # BERT benefits from more complete sentences, so aggressive stopword removal/lemmatization might sometimes be detrimental.
-    # However, following the prompt's request for these steps.
     tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words_nltk and word.isalpha()]
     return ' '.join(tokens)
 
@@ -93,26 +80,20 @@ def categorize_rating(rating):
 df['Sentiment'] = df['Rating'].apply(categorize_rating)
 print("\nSentiment distribution:\n", df['Sentiment'].value_counts())
 
-# Encode labels
 label_encoder = LabelEncoder()
 df['SentimentEncoded'] = label_encoder.fit_transform(df['Sentiment'])
-# Ensure the order of classes for classification_report later
-class_names = label_encoder.classes_ 
+class_names = label_encoder.classes_
 print(f"\nEncoded labels: {dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))}")
 
 
-# Select features (X) and target (y)
-X = df['Processed_Review'].values # Use processed reviews
+X = df['Processed_Review'].values
 y = df['SentimentEncoded'].values
 
-# Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=RANDOM_STATE, stratify=y)
 
-# Initialize BERT tokenizer
 print(f"\nLoading BERT tokenizer: {MODEL_NAME}...")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
-# Tokenize function
 def tokenize_data(texts, max_len):
     input_ids = []
     attention_masks = []
@@ -137,11 +118,9 @@ train_input_ids, train_attention_masks = tokenize_data(X_train, MAX_LEN)
 print("Tokenizing test data...")
 test_input_ids, test_attention_masks = tokenize_data(X_test, MAX_LEN)
 
-# Convert labels to tensors
 train_labels = torch.tensor(y_train)
 test_labels = torch.tensor(y_test)
 
-# Create DataLoaders
 train_dataset = TensorDataset(train_input_ids, train_attention_masks, train_labels)
 train_sampler = RandomSampler(train_dataset)
 train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=BATCH_SIZE)
@@ -150,24 +129,21 @@ test_dataset = TensorDataset(test_input_ids, test_attention_masks, test_labels)
 test_sampler = SequentialSampler(test_dataset)
 test_dataloader = DataLoader(test_dataset, sampler=test_sampler, batch_size=BATCH_SIZE)
 
-# Load BERT model
 print(f"\nLoading BERT model for sequence classification: {MODEL_NAME}...")
-model = AutoModelForSequenceClassification.from_pretrained( # MODIFIED
+model = AutoModelForSequenceClassification.from_pretrained(
     MODEL_NAME,
-    num_labels=NUM_LABELS, # ADDED
-    output_attentions=False, # Optional: Can be re-added
-    output_hidden_states=False # Optional: Can be re-added
+    num_labels=NUM_LABELS,
+    output_attentions=False,
+    output_hidden_states=False
 )
 model.to(device)
 
-# Optimizer and Scheduler
 optimizer = AdamW(model.parameters(), lr=LEARNING_RATE, eps=1e-8)
 total_steps = len(train_dataloader) * EPOCHS
 scheduler = get_linear_schedule_with_warmup(optimizer,
                                             num_warmup_steps=0,
                                             num_training_steps=total_steps)
 
-# Training loop
 print("\nStarting training...")
 for epoch_i in range(0, EPOCHS):
     print(f"\n======== Epoch {epoch_i + 1} / {EPOCHS} ========")
@@ -189,7 +165,7 @@ for epoch_i in range(0, EPOCHS):
         loss = outputs.loss
         total_train_loss += loss.item()
         loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0) # Clip gradients
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
         scheduler.step()
 
@@ -198,7 +174,6 @@ for epoch_i in range(0, EPOCHS):
 
 print("\nTraining complete.")
 
-# Evaluation
 print("\nEvaluating model...")
 model.eval()
 all_preds = []
@@ -221,12 +196,10 @@ for batch in test_dataloader:
     all_true_labels.extend(label_ids.flatten())
 
 print("\nModel Evaluation:")
-# Use the class_names obtained from LabelEncoder for target_names
 print(classification_report(all_true_labels, all_preds, target_names=class_names))
 
 
-# Example of classifying new reviews
-new_reviews_raw = [ # Renamed to avoid confusion
+new_reviews_raw = [
     "This hotel was fantastic, the service was excellent!",
     "The room was dirty and the staff were rude.",
     "It was an okay experience, nothing special."
@@ -235,14 +208,13 @@ print("\nPreprocessing new reviews for BERT prediction...")
 new_reviews_processed = [preprocess_text_bert(review) for review in new_reviews_raw]
 print("Preprocessing of new reviews complete.")
 
-model.eval() # Ensure model is in eval mode
+model.eval()
 
-# Tokenize new processed reviews
 encoded_batch = tokenizer.batch_encode_plus(
-    new_reviews_processed, # Use processed reviews
+    new_reviews_processed,
     add_special_tokens=True,
     max_length=MAX_LEN,
-    padding='max_length', # Changed from pad_to_max_length for batch_encode_plus
+    padding='max_length',
     truncation=True,
     return_attention_mask=True,
     return_tensors='pt'
@@ -261,12 +233,4 @@ predicted_sentiments = label_encoder.inverse_transform(predictions_indices)
 for original_review, processed_review, sentiment in zip(new_reviews_raw, new_reviews_processed, predicted_sentiments):
     print(f"Original Review: \"{original_review}\"")
     print(f"Processed Review: \"{processed_review}\" -> Predicted Sentiment: {sentiment}")
-
-# Optional: Save the model and tokenizer
-# output_dir = './bert_sentiment_model/'
-# if not os.path.exists(output_dir):
-#     os.makedirs(output_dir)
-# print(f"\nSaving model to {output_dir}")
-# model.save_pretrained(output_dir)
-# tokenizer.save_pretrained(output_dir)
-# print("Model and tokenizer saved.")
+``` 

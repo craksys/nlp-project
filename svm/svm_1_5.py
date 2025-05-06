@@ -12,7 +12,6 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
-# Download necessary NLTK data (if not already downloaded)
 try:
     stopwords.words('english')
 except LookupError:
@@ -26,80 +25,57 @@ try:
 except LookupError:
     nltk.download('wordnet')
 try:
-    # Check for punkt_tab directly
     nltk.data.find('tokenizers/punkt_tab')
 except LookupError:
     nltk.download('punkt_tab')
 
-
-
-# Unzip the dataset
 csv_file_name = "tripadvisor_hotel_reviews.csv"
 df = pd.read_csv(csv_file_name)
 
-# Load the dataset
 print("Dataset loaded successfully.")
 print("Dataset head:\n", df.head())
 print("\nDataset info:\n")
 df.info()
 
-    # Preprocessing
-    # Drop rows with missing reviews or ratings if any
 df.dropna(subset=['Review', 'Rating'], inplace=True)
 
-# Initialize lemmatizer and stopwords
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words('english'))
 
 def preprocess_text(text):
-    # Convert to lowercase
     text = text.lower()
-    # Remove special characters and punctuation
     text = re.sub(r'[^a-z\s]', '', text)
-    # Tokenize text
     tokens = word_tokenize(text)
-    # Remove stop words and lemmatize
     tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words and word.isalpha()]
     return ' '.join(tokens)
 
-# Apply preprocessing to the Review column
 print("\nPreprocessing reviews...")
 df['Processed_Review'] = df['Review'].apply(preprocess_text)
 print("Preprocessing complete.")
 print("Example of processed review:\n", df[['Review', 'Processed_Review']].head())
 
-    # Target variable is the 'Rating' itself
-    # Ensure 'Rating' is treated as a categorical label, converting to string is a safe way
-df['Sentiment_Category'] = df['Rating'].astype(str) 
+df['Sentiment_Category'] = df['Rating'].astype(str)
 print("\nRating distribution:\n", df['Rating'].value_counts().sort_index())
 
-# Select features (X) and target (y)
-X = df['Processed_Review'] # Use processed reviews
-y = df['Sentiment_Category'] # Use the string version of ratings as target
+X = df['Processed_Review']
+y = df['Sentiment_Category']
 
-    # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-    # TF-IDF Vectorization
-vectorizer = TfidfVectorizer(max_features=5000) # Removed stop_words='english'
+vectorizer = TfidfVectorizer(max_features=5000)
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
 
-    # Train SVM model
 print("\nTraining SVM model...")
-svm_model = SVC(kernel='linear', C=1.0, random_state=42) # Linear kernel is often good for text
+svm_model = SVC(kernel='linear', C=1.0, random_state=42)
 svm_model.fit(X_train_tfidf, y_train)
 print("SVM model trained.")
 
-    # Make predictions
 y_pred = svm_model.predict(X_test_tfidf)
 
-    # Evaluate the model
 print("\nModel Evaluation:")
-# Ensure target_names match the unique sorted string values in y_test
-target_names = sorted(y_test.unique()) 
-print(classification_report(y_test, y_pred, target_names=target_names)) 
-   # Example of classifying new reviews
+target_names = sorted(y_test.unique())
+print(classification_report(y_test, y_pred, target_names=target_names))
 new_reviews = [
        "This hotel was fantastic, the service was excellent!",
         "The room was dirty and the staff were rude.",
