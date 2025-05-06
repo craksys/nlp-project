@@ -6,6 +6,29 @@ from sklearn.svm import SVC
 from sklearn.metrics import classification_report
 import zipfile
 import os
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+# Download necessary NLTK data (if not already downloaded)
+try:
+    stopwords.words('english')
+except LookupError:
+    nltk.download('stopwords')
+try:
+    word_tokenize("test")
+except LookupError:
+    nltk.download('punkt')
+try:
+    WordNetLemmatizer().lemmatize("test")
+except LookupError:
+    nltk.download('wordnet')
+try:
+    # Check for punkt_tab directly
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt_tab')
 
 
 # Unzip the dataset
@@ -22,6 +45,27 @@ df.info()
     # Drop rows with missing reviews or ratings if any
 df.dropna(subset=['Review', 'Rating'], inplace=True)
 
+# Initialize lemmatizer and stopwords
+lemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words('english'))
+
+def preprocess_text(text):
+    # Convert to lowercase
+    text = text.lower()
+    # Remove special characters and punctuation
+    text = re.sub(r'[^a-z\s]', '', text)
+    # Tokenize text
+    tokens = word_tokenize(text)
+    # Remove stop words and lemmatize
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words and word.isalpha()]
+    return ' '.join(tokens)
+
+# Apply preprocessing to the Review column
+print("\nPreprocessing reviews...")
+df['Processed_Review'] = df['Review'].apply(preprocess_text)
+print("Preprocessing complete.")
+print("Example of processed review:\n", df[['Review', 'Processed_Review']].head())
+
     # Define a function to categorize ratings
 def categorize_rating(rating):
     if rating <= 2:
@@ -36,14 +80,14 @@ df['Sentiment'] = df['Rating'].apply(categorize_rating)
 print("\nSentiment distribution:\n", df['Sentiment'].value_counts())
 
 # Select features (X) and target (y)
-X = df['Review']
+X = df['Processed_Review'] # Use processed reviews
 y = df['Sentiment']
 
     # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
     # TF-IDF Vectorization
-vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
+vectorizer = TfidfVectorizer(max_features=5000) # Removed stop_words='english'
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
 
@@ -65,10 +109,16 @@ new_reviews = [
         "The room was dirty and the staff were rude.",
         "It was an okay experience, nothing special."
     ]
-new_reviews_tfidf = vectorizer.transform(new_reviews)
+
+print("\nPreprocessing new reviews for prediction...")
+processed_new_reviews = [preprocess_text(review) for review in new_reviews]
+print("Preprocessing of new reviews complete.")
+
+new_reviews_tfidf = vectorizer.transform(processed_new_reviews)
 predictions = svm_model.predict(new_reviews_tfidf)
 
 print("\nPredictions for new reviews:")
-for review, sentiment in zip(new_reviews, predictions):
-    print(f"Review: \"{review}\" -> Predicted Sentiment: {sentiment}")
+for original_review, processed_review, sentiment in zip(new_reviews, processed_new_reviews, predictions):
+    print(f"Original Review: \"{original_review}\"")
+    print(f"Processed Review: \"{processed_review}\" -> Predicted Sentiment: {sentiment}")
 

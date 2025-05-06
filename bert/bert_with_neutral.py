@@ -9,6 +9,31 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_
 from torch.optim import AdamW
 import numpy as np
 import os
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
+# Download necessary NLTK data (if not already downloaded)
+try:
+    stopwords.words('english')
+except LookupError:
+    nltk.download('stopwords')
+try:
+    word_tokenize("test")
+except LookupError:
+    nltk.download('punkt')
+try:
+    WordNetLemmatizer().lemmatize("test")
+except LookupError:
+    nltk.download('wordnet')
+try:
+    # Check for punkt_tab directly
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt_tab')
+
 
 # Configuration
 MODEL_NAME = "google-bert/bert-base-uncased"
@@ -24,7 +49,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # Load the dataset
-csv_file_name = "/content/tripadvisor_hotel_reviews.csv"
+csv_file_name = "tripadvisor_hotel_reviews.csv"
 if not os.path.exists(csv_file_name):
     print(f"Error: {csv_file_name} not found. Please ensure the dataset is in the same directory.")
     exit()
@@ -34,6 +59,28 @@ print("Dataset loaded successfully.")
 
 # Preprocessing
 df.dropna(subset=['Review', 'Rating'], inplace=True)
+
+# Initialize lemmatizer and stopwords
+lemmatizer = WordNetLemmatizer()
+stop_words_nltk = set(stopwords.words('english')) # Renamed to avoid conflict if 'stopwords' is used elsewhere
+
+def preprocess_text_bert(text):
+    # Convert to lowercase
+    text = text.lower()
+    # Remove special characters and punctuation - BERT might handle some, but cleaning helps consistency
+    text = re.sub(r'[^a-z0-9\s]', '', text) # Kept numbers as BERT might use them
+    # Tokenize text
+    tokens = word_tokenize(text)
+    # Remove stop words and lemmatize
+    # BERT benefits from more complete sentences, so aggressive stopword removal/lemmatization might sometimes be detrimental.
+    # However, following the prompt's request for these steps.
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words_nltk and word.isalpha()]
+    return ' '.join(tokens)
+
+print("\nPreprocessing reviews for BERT...")
+df['Processed_Review'] = df['Review'].apply(preprocess_text_bert)
+print("Preprocessing complete.")
+print("Example of processed review for BERT:\n", df[['Review', 'Processed_Review']].head())
 
 def categorize_rating(rating):
     if rating <= 2:
@@ -55,7 +102,7 @@ print(f"\nEncoded labels: {dict(zip(label_encoder.classes_, label_encoder.transf
 
 
 # Select features (X) and target (y)
-X = df['Review'].values
+X = df['Processed_Review'].values # Use processed reviews
 y = df['SentimentEncoded'].values
 
 # Split data
@@ -179,18 +226,20 @@ print(classification_report(all_true_labels, all_preds, target_names=class_names
 
 
 # Example of classifying new reviews
-new_reviews = [
+new_reviews_raw = [ # Renamed to avoid confusion
     "This hotel was fantastic, the service was excellent!",
     "The room was dirty and the staff were rude.",
     "It was an okay experience, nothing special."
 ]
-print("\nPredictions for new reviews:")
+print("\nPreprocessing new reviews for BERT prediction...")
+new_reviews_processed = [preprocess_text_bert(review) for review in new_reviews_raw]
+print("Preprocessing of new reviews complete.")
 
 model.eval() # Ensure model is in eval mode
 
-# Tokenize new reviews
+# Tokenize new processed reviews
 encoded_batch = tokenizer.batch_encode_plus(
-    new_reviews,
+    new_reviews_processed, # Use processed reviews
     add_special_tokens=True,
     max_length=MAX_LEN,
     padding='max_length', # Changed from pad_to_max_length for batch_encode_plus
@@ -209,8 +258,9 @@ logits = outputs.logits
 predictions_indices = torch.argmax(logits, dim=1).cpu().numpy()
 predicted_sentiments = label_encoder.inverse_transform(predictions_indices)
 
-for review, sentiment in zip(new_reviews, predicted_sentiments):
-    print(f"Review: \"{review}\" -> Predicted Sentiment: {sentiment}")
+for original_review, processed_review, sentiment in zip(new_reviews_raw, new_reviews_processed, predicted_sentiments):
+    print(f"Original Review: \"{original_review}\"")
+    print(f"Processed Review: \"{processed_review}\" -> Predicted Sentiment: {sentiment}")
 
 # Optional: Save the model and tokenizer
 # output_dir = './bert_sentiment_model/'
