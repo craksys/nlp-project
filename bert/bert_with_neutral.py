@@ -233,4 +233,3 @@ predicted_sentiments = label_encoder.inverse_transform(predictions_indices)
 for original_review, processed_review, sentiment in zip(new_reviews_raw, new_reviews_processed, predicted_sentiments):
     print(f"Original Review: \"{original_review}\"")
     print(f"Processed Review: \"{processed_review}\" -> Predicted Sentiment: {sentiment}")
-``` 
