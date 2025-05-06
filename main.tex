@@ -66,12 +66,20 @@ Analiza emocji wiąże się z wykorzystaniem technik opartych na leksykonach, w 
 W ostatnich latach rozwój uczenia maszynowego doprowadził do pojawienia się bardziej złożonych modeli, które wykorzystują techniki głębokiego uczenia, znacznie usprawniając dotychczasowe, klasyczne podejścia do klasyfikacji danych \cite{10.1155/2016/6965725}\cite{10.30534/ijeter/2020/46822020}. Jak zauważa Cambria, nowe metody opierają się na ogromnych bazach wiedzy, co pozwala im lepiej rozpoznawać i interpretować subtelne różnice w języku naturalnym oraz emocje zawarte w tekstach, co w efekcie znacząco poprawia trafność analizy sentymentu \cite{10.1109/mis.2013.30}. Dzięki temu analiza opinii przekształca się w niezwykle ważne narzędzie, wykorzystywane coraz szerzej w analizach rynkowych, poprawie jakości obsługi klienta oraz wspomaganiu strategicznego podejmowania decyzji w różnych sektorach gospodarki.
 
 \section{Eksperymentu}
+\subsection{Pytania badawcze}
+\begin{itemize}
+    \item Czy klasyczne modele uczenia maszynowego (np. Naïve Bayes, SVM) są wystarczające do skutecznej klasyfikacji opinii, czy warto zastosować modele głębokiego uczenia (np. BERT)?
+    \item Jak zmienia się dokładność klasyfikacji w zależności od liczby klas (np. binary: pozytywne/negatywne vs. trójklasowe: pozytywne/neutralne/negatywne)?
+    \item Jakie cechy tekstowe mają największy wpływ na skuteczność klasyfikacji opinii klientów?
+    
+\end{itemize}
+
 \subsection{Plan eksperymentu}
 W ramach eksperymentu przeprowadzimy klasyfikację recenzji przy użyciu trzech różnych klasyfikatorów:
 \begin{itemize}
-    \item Naiwny Bayes
-    \item SVM (Support Vector Machine)
-    \item Regresja Logistyczna
+    \item \textbf{Naiwny Bayes}
+    \item \textbf{SVM (Support Vector Machine)}
+    \item \textbf{BERT}
 \end{itemize}
 
 Eksperyment zostanie przeprowadzony na dwóch różnych zbiorach danych, co pozwoli na porównanie skuteczności klasyfikatorów w różnych kontekstach. Dodatkowo, przeprowadzimy analizę statystyczną wyników, aby określić, czy różnice w skuteczności klasyfikatorów są statystycznie istotne.
@@ -99,8 +107,8 @@ Naiwny Bayes to probabilistyczny klasyfikator oparty na twierdzeniu Bayesa. Zak�
 \subsubsection{SVM (Support Vector Machine)}
 SVM to klasyfikator, który znajduje hiperpłaszczyznę maksymalnie oddzielającą klasy w przestrzeni cech. W naszym eksperymencie używamy jądra liniowego. SVM jest szczególnie skuteczny w przypadku danych o wysokiej wymiarowości, takich jak tekst.
 
-\subsubsection{Regresja Logistyczna}
-Regresja logistyczna to model statystyczny używany do klasyfikacji binarnej. Modeluje prawdopodobieństwo przynależności do klasy za pomocą funkcji logistycznej. Jest interpretowalny i często osiąga dobre wyniki w klasyfikacji tekstu.
+\subsubsection{BERT}
+BERT (Bidirectional Encoder Representations from Transformers) to model oparty na architekturze Transformer, wstępnie wytrenowany na dużych korpusach tekstu. W naszym eksperymencie wykorzystujemy model \texttt{bert-base-uncased}, który został dostrojony (fine-tuned) do zadania klasyfikacji sekwencji. BERT przetwarza całe sekwencje słów jednocześnie, uwzględniając kontekst dwukierunkowo, co pozwala na głębsze zrozumienie znaczenia tekstu. Model ten jest znany z osiągania najnowocześniejszych wyników w wielu zadaniach przetwarzania języka naturalnego, w tym w analizie sentymentu.
 
 \subsection{Metryki oceny}
 Do oceny skuteczności klasyfikatorów używamy następujących metryk:
