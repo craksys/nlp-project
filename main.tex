@@ -1,0 +1,148 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+%
+\usepackage{graphicx}
+
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following two lines
+% to display URLs in blue roman font according to Springer's eBook style:
+%\usepackage{color}
+%\renewcommand\UrlFont{\color{blue}\rmfamily}
+%\urlstyle{rm}
+%
+\begin{document}
+%
+\title{Klasyfikacja opinii w recenzjach klientów}
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{Kamil Kochan\inst{1}\orcidID{259141} \and
+Jakub Grelowski\inst{2,3}\orcidID{262754} \and
+Maksym Malicki\inst{3}\orcidID{259216}}
+%
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{Politechnika Wrocławska\\Wydział Informatyki i Telekomunikacji\\
+\url{https://wit.pwr.edu.pl}\\
+}
+%
+\maketitle              % typeset the header of the contribution
+%
+
+
+\section{Wstęp}
+
+Klasyfikacja tekstu używana w zbieraniu i ocenianiu opinii jest kluczowym segmentem wielu aplikacji odpowiedzialnych za analizę behawioralną użytkowników końcowych, w szczególności w wypowiedziach na temat usług, produktów lub w mediach społecznościowych. Najważniejszą funkcją tego typu klasyfikacji jest zautomatyzowanie wykrywania opinii oraz jej właściwa klasyfikacja, zazwyczaj na dobre lub złe, czasami dodawana jest trzecia etykieta: neutralna. Klasyfikacja ta może odbywać się na kilku poziomach: dokumentu, zdania lub aspektu, w zależności od konkretnych wymagań zadania\cite{almatarneh2018lexicon}\cite{he2015novel}\cite{rahab2023rule}.
+
+\section{Przegląd literatury}
+
+%Text classification, particularly in the context of opinion mining or sentiment analysis, is a critical field of study for various applications, including consumer behavior analysis, product reviews, and social media monitoring. The primary aim of sentiment analysis is to automatically detect and classify sentiments expressed in texts as positive, negative, or neutral. This classification can occur on several levels: document, sentence, or aspect level, depending on the specific requirements of the task .
+
+
+Istnieje wiele metod używanych w klasyfikacji sentymentu, a jednym z algorytmów najczęściej dobieranych w tym obszarze jest SVM \textit{(ang. Support Vector Machine)}, którego zaletą jest efektywność w zarządzaniu wielowymiarową przestrzenią danych, typową dla danych tekstowych\cite{putri2021analysis}\cite{nurqoulby2024analysis}. Gade podkreśla konieczność stosowania zautomatyzowanych technik w analizie sentymentu do skutecznej klasyfikacji opinii na podstawie wyrażonych w nich uczuć, co przemawia za podejściem SVM, szczególnie przydatnym w szybko zmieniających się środowiskach, w których czas ma kluczowe znaczenie\cite{10.22214/ijraset.2023.53030}. Badania pokazują, że SVM daje wiarygodne wyniki dla klasyfikacji sentymentów pobranych z platform takich jak Twitter, gdzie opinia publiczna może ulegać znacznym wahaniom\cite{10.32734/jocai.v8.i2-16317}\cite{10.31937/ti.v14i1.2384}. Patel\cite{10.5120/ijca2015907218} przedstawia podstawowy przegląd technik klasyfikacji opinii, opisując tradycyjne metody uczenia nadzorowanego, takie jak Naive Bayes i SVM, służące do określania polaryzacji opinii (czy są pozytywne, negatywne czy neutralne) na różnych poziomach szczegółowości — całego dokumentu, pojedynczego zdania oraz konkretnego elementu (np. produktu). Garg.\cite{10.1109/confluence51648.2021.9377188} proponuje praktyczne zastosowanie klasyfikacji opinii, w postaci systemu rekomendacji leków oparty na analizie sentymentu opinii pacjentów, wykorzystujący różne metody wektoryzacji tekstu (BoW, TF-IDF, Word2Vec, cechy manualne) i klasyfikatory uczenia maszynowego do przewidywania sentymentu opinii, co następnie pozwala na polecanie leków na podstawie ocen sentymentu i liczby użytecznych opinii.
+
+%There is a robust foundation of methods used in sentiment classification, with the Support Vector Machine (SVM) algorithm being one of the most prominent due to its effectiveness in handling high-dimensional spaces typical of textual data \cite{putri2021analysis}\cite{nurqoulby2024analysis}. For instance, Gade emphasizes the necessity for automated techniques in sentiment analysis to effectively classify opinions based on their expressed sentiment, making a case for the SVM approach particularly suitable in fast-paced environments where time is crucial \cite{10.22214/ijraset.2023.53030}. Similarly, research shows that SVM produces reliable outcomes for classifying sentiments derived from platforms like Twitter, where public opinion can fluctuate widely \cite{10.32734/jocai.v8.i2-16317}\cite{10.31937/ti.v14i1.2384}.
+
+Metodologia analizy sentymentu opartej na cechach odgrywa znaczącą rolę w dokładnym klasyfikowaniu opinii poprzez rozpoznawanie pewnych atrybutów lub aspektów omawianych w recenzjach\cite{10.1177/0165551514547842}\cite{10.1177/0165551519849516}. Ten aspekt jest podkreślany w pracy Hu i Liu, którzy demonstrują istotność podsumowywania recenzji klientów nie tylko poprzez ich ogólny sentyment, ale także przez wydobywanie określonych cech produktów\cite{10.1145/1014052.1014073}. Umiejętność rozróżniania klas sentymentu wychodzi poza klasyczną klasyfikację binarną. Wymaga także zrozumienia kontekstu, gdzie sentymenty mogą być pozytywne w jednej sytuacji i negatywne w innych\cite{10.1109/mis.2013.30}.
+
+%Moreover, the methodology of feature-based sentiment analysis plays a significant role in accurately classifying opinions by identifying specific attributes or aspects discussed in the reviews \cite{10.1177/0165551514547842}\cite{10.1177/0165551519849516}. This aspect is emphasized by the work of Hu and Liu, who demonstrate the importance of summarizing customer reviews not just by their general sentiment but by mining specific product features, thereby guiding businesses in enhancing customer satisfaction \cite{10.1145/1014052.1014073}. The capability to differentiate sentiment classes extends beyond mere binary classification; it involves understanding the context, where sentiments can be positive in one situation and negative in another depending on the aspects involved \cite{10.1109/mis.2013.30}.
+Analiza emocji wiąże się z wykorzystaniem technik opartych na leksykonach, w których są wcześniej zdefiniowane zestawy słów, które można przypisać do określonych emocji i nastrojów. Almatarneh i Gamallo w publikacji omawiają znaczenie metod opartych na leksykonach w wykrywaniu opinii, które są podstawą do wydzielenia granic pomiędzy klasą negatywnych a pozytywnych opinii\cite{10.1371/journal.pone.0197816}. Zaawansowane techniki, takie jak analiza nastrojów oparta na aspektach, skupiają się na ocenie określonych atrybutów, które umożliwiają bardziej szczegółowe zrozumienie opinii klientów\cite{10.1371/journal.pone.0207996}. Han \cite{10.1109/icnidc.2010.5657968} proponuje podejście oparte na wektorze klasyfikacyjnym fraz sentymentalnych, w którym opinie wyrażone w tekście są reprezentowane jako uporządkowane zestawy fraz (głównie przymiotników i przysłówków), a następnie porównywane z wcześniej wytrenowanymi za pomocą metryk podobieństwa (np. cosinusowej)
+%Sentiment analysis also entails the use of various lexicon-based techniques, wherein predefined sets of words associated with particular sentiments are employed to evaluate and classify opinions accurately. Almatarneh and Gamallo discuss the significance of lexicon-based methods in detecting extreme opinions, which form the basis for defining class boundaries for negative and positive sentiments \cite{10.1371/journal.pone.0197816}. Complementarily, sophisticated techniques such as aspect-based sentiment analysis focus on evaluating sentiments towards specific attributes, allowing for a more granular understanding of customer opinions \cite{10.1371/journal.pone.0207996}.
+
+W ostatnich latach rozwój uczenia maszynowego doprowadził do pojawienia się bardziej złożonych modeli, które wykorzystują techniki głębokiego uczenia, znacznie usprawniając dotychczasowe, klasyczne podejścia do klasyfikacji danych \cite{10.1155/2016/6965725}\cite{10.30534/ijeter/2020/46822020}. Jak zauważa Cambria, nowe metody opierają się na ogromnych bazach wiedzy, co pozwala im lepiej rozpoznawać i interpretować subtelne różnice w języku naturalnym oraz emocje zawarte w tekstach, co w efekcie znacząco poprawia trafność analizy sentymentu \cite{10.1109/mis.2013.30}. Dzięki temu analiza opinii przekształca się w niezwykle ważne narzędzie, wykorzystywane coraz szerzej w analizach rynkowych, poprawie jakości obsługi klienta oraz wspomaganiu strategicznego podejmowania decyzji w różnych sektorach gospodarki.
+
+\section{Eksperymentu}
+\subsection{Plan eksperymentu}
+W ramach eksperymentu przeprowadzimy klasyfikację recenzji przy użyciu trzech różnych klasyfikatorów:
+\begin{itemize}
+    \item Naiwny Bayes
+    \item SVM (Support Vector Machine)
+    \item Regresja Logistyczna
+\end{itemize}
+
+Eksperyment zostanie przeprowadzony na dwóch różnych zbiorach danych, co pozwoli na porównanie skuteczności klasyfikatorów w różnych kontekstach. Dodatkowo, przeprowadzimy analizę statystyczną wyników, aby określić, czy różnice w skuteczności klasyfikatorów są statystycznie istotne.
+
+\subsection{Zbiory danych}
+[Do uzupełnienia - opis wybranych zbiorów danych]
+
+\subsection{Preprocessing}
+Przed klasyfikacją teksty poddawane są następującym zabiegom:
+\begin{itemize}
+    \item Konwersja do małych liter
+    \item Usunięcie znaków specjalnych i interpunkcji
+    \item Tokenizacja tekstu
+    \item Usunięcie stop words
+    \item Lematyzacja słów
+\end{itemize}
+
+Następnie teksty są przekształcane do reprezentacji TF-IDF (Term Frequency-Inverse Document Frequency) z wykorzystaniem maksymalnie 5000 cech.
+
+\section{Klasyfikatory}
+
+\subsubsection{Naiwny Bayes}
+Naiwny Bayes to probabilistyczny klasyfikator oparty na twierdzeniu Bayesa. Zakłada on niezależność cech, co upraszcza obliczenia, ale może nie odzwierciedlać rzeczywistych zależności w danych. Jest szybki w trenowaniu i często skuteczny w klasyfikacji tekstu.
+
+\subsubsection{SVM (Support Vector Machine)}
+SVM to klasyfikator, który znajduje hiperpłaszczyznę maksymalnie oddzielającą klasy w przestrzeni cech. W naszym eksperymencie używamy jądra liniowego. SVM jest szczególnie skuteczny w przypadku danych o wysokiej wymiarowości, takich jak tekst.
+
+\subsubsection{Regresja Logistyczna}
+Regresja logistyczna to model statystyczny używany do klasyfikacji binarnej. Modeluje prawdopodobieństwo przynależności do klasy za pomocą funkcji logistycznej. Jest interpretowalny i często osiąga dobre wyniki w klasyfikacji tekstu.
+
+\subsection{Metryki oceny}
+Do oceny skuteczności klasyfikatorów używamy następujących metryk:
+
+\subsubsection{Dokładność (Accuracy)}
+Mierzy ogólną poprawność klasyfikacji jako stosunek poprawnie sklasyfikowanych próbek do wszystkich próbek:
+\begin{equation}
+    Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation}
+
+\subsubsection{Precyzja (Precision)}
+Mierzy dokładność pozytywnych predykcji:
+\begin{equation}
+    Precision = \frac{TP}{TP + FP}
+\end{equation}
+
+\subsubsection{Czułość (Recall)}
+Mierzy zdolność modelu do znalezienia wszystkich pozytywnych przypadków:
+\begin{equation}
+    Recall = \frac{TP}{TP + FN}
+\end{equation}
+
+\subsubsection{F1-Score}
+Średnia harmoniczna precyzji i czułości:
+\begin{equation}
+    F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
+\end{equation}
+
+\subsection{Analiza statystyczna}
+Aby określić, czy różnice w skuteczności klasyfikatorów są statystycznie istotne, przeprowadzamy test t-Studenta dla par próbek. Test ten pozwala na porównanie średnich wyników różnych klasyfikatorów i określenie, czy obserwowane różnice są istotne statystycznie.
+\begin{credits}
+
+\end{credits}
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+% \bibliographystyle{splncs04}
+% \bibliography{mybibliography}
+%
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+\end{document}
