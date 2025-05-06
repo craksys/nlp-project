@@ -65,7 +65,11 @@ Analiza emocji wiąże się z wykorzystaniem technik opartych na leksykonach, w 
 
 W ostatnich latach rozwój uczenia maszynowego doprowadził do pojawienia się bardziej złożonych modeli, które wykorzystują techniki głębokiego uczenia, znacznie usprawniając dotychczasowe, klasyczne podejścia do klasyfikacji danych \cite{10.1155/2016/6965725}\cite{10.30534/ijeter/2020/46822020}. Jak zauważa Cambria, nowe metody opierają się na ogromnych bazach wiedzy, co pozwala im lepiej rozpoznawać i interpretować subtelne różnice w języku naturalnym oraz emocje zawarte w tekstach, co w efekcie znacząco poprawia trafność analizy sentymentu \cite{10.1109/mis.2013.30}. Dzięki temu analiza opinii przekształca się w niezwykle ważne narzędzie, wykorzystywane coraz szerzej w analizach rynkowych, poprawie jakości obsługi klienta oraz wspomaganiu strategicznego podejmowania decyzji w różnych sektorach gospodarki.
 
-\section{Eksperymentu}
+\section{Eksperyment}
+
+\subsection{Pomysł na projekt}
+Pomysł na projekt zakłada przeprowadzenie kompleksowej analizy porównawczej wydajności różnych modeli uczenia maszynowego w zadaniu klasyfikacji sentymentu recenzji klientów. Głównym celem jest ocena, jak klasyczne algorytmy, takie jak Naiwny Bayes i SVM, radzą sobie w porównaniu z nowoczesnymi modelami głębokiego uczenia, w szczególności modelem BERT, w kontekście trójklasowej klasyfikacji opinii (pozytywne, negatywne, neutralne). Badanie ma na celu zidentyfikowanie najskuteczniejszych podejść oraz zrozumienie wpływu różnych etapów przetwarzania tekstu i metod reprezentacji cech na końcową jakość klasyfikacji. Wyniki projektu mogą dostarczyć cennych wskazówek dla tworzenia zautomatyzowanych systemów analizy opinii.
+
 \subsection{Pytania badawcze}
 \begin{itemize}
     \item Czy klasyczne modele uczenia maszynowego (np. Naïve Bayes, SVM) są wystarczające do skutecznej klasyfikacji opinii, czy warto zastosować modele głębokiego uczenia (np. BERT)?
@@ -74,41 +78,59 @@ W ostatnich latach rozwój uczenia maszynowego doprowadził do pojawienia się b
     
 \end{itemize}
 
-\subsection{Plan eksperymentu}
-W ramach eksperymentu przeprowadzimy klasyfikację recenzji przy użyciu trzech różnych klasyfikatorów:
+\subsection{Plan eksperymentów}
+Plan eksperymentów został zaprojektowany w celu systematycznego zbadania odpowiedzi na postawione pytania badawcze:
 \begin{itemize}
-    \item \textbf{Naiwny Bayes}
-    \item \textbf{SVM (Support Vector Machine)}
-    \item \textbf{BERT}
+    \item \textbf{Eksperyment 1: Porównanie wydajności modeli (RQ1):} Przeprowadzone zostaną eksperymenty trenowania i testowania trzech głównych typów klasyfikatorów: Naiwnego Bayesa, SVM (z jądrem liniowym) oraz modelu BERT (\texttt{google-bert/bert-base-uncased}). Wszystkie modele będą oceniane na tym samym zbiorze danych, podzielonym na część treningową (80\%) i testową (20\%) z wykorzystaniem stratyfikacji. Wydajność będzie mierzona za pomocą metryk: dokładność, precyzja, czułość oraz F1-score dla każdej z trzech klas sentymentu. Różnice w wynikach uzyskanych przez poszczególne klasyfikatory zostaną poddane analizie statystycznej z użyciem testu t-Studenta dla par próbek, aby ocenić istotność statystyczną obserwowanych różnic.
+    \item \textbf{Eksperyment 2: Wpływ liczby klas na dokładność (RQ2):} Główny nacisk zostanie położony na klasyfikację trójklasową (pozytywne, neutralne, negatywne), co jest odzwierciedlone w implementacji. Analiza dokładności w tym ustawieniu pozwoli ocenić zdolność modeli do rozróżniania nie tylko skrajnych, ale i pośrednich opinii. Wnioski będą formułowane na podstawie wyników uzyskanych dla tego trójklasowego scenariusza.
+    \item \textbf{Eksperyment 3: Analiza wpływu cech tekstowych (RQ3):} Analiza wpływu cech tekstowych będzie realizowana poprzez ocenę działania mechanizmu TF-IDF dla modeli klasycznych (Naiwny Bayes, SVM) oraz wewnętrznych mechanizmów uwagi i embeddingów w modelu BERT. Celem jest zrozumienie, które aspekty danych wejściowych są najbardziej informatywne dla poszczególnych modeli w kontekście klasyfikacji opinii.
 \end{itemize}
 
-Eksperyment zostanie przeprowadzony na dwóch różnych zbiorach danych, co pozwoli na porównanie skuteczności klasyfikatorów w różnych kontekstach. Dodatkowo, przeprowadzimy analizę statystyczną wyników, aby określić, czy różnice w skuteczności klasyfikatorów są statystycznie istotne.
+\subsection{Implementacja środowiska badawczego}
 
-\subsection{Zbiory danych}
-[Do uzupełnienia - opis wybranych zbiorów danych]
-
-\subsection{Preprocessing}
-Przed klasyfikacją teksty poddawane są następującym zabiegom:
+\subsubsection{Zbiory danych}
+Wykorzystany zbiór danych to \textit{TripAdvisor Hotel Reviews}, zawarty w pliku \texttt{tripadvisor\_hotel\_reviews.csv}. Zbiór ten zawiera recenzje hoteli oraz odpowiadające im oceny w skali od 1 do 5. Na potrzeby eksperymentu, oceny te zostały przekształcone w trójklasowe etykiety sentymentu:
 \begin{itemize}
-    \item Konwersja do małych liter
-    \item Usunięcie znaków specjalnych i interpunkcji
-    \item Tokenizacja tekstu
-    \item Usunięcie stop words
-    \item Lematyzacja słów
+    \item 'bad' (negatywna) dla ocen 1 i 2,
+    \item 'neutral' (neutralna) dla oceny 3,
+    \item 'good' (pozytywna) dla ocen 4 i 5.
+\end{itemize}
+Wiersze z brakującymi wartościami w kolumnach 'Review' lub 'Rating' zostały usunięte.
+
+\subsubsection{Preprocessing}
+Przed przekazaniem tekstów do etapu ekstrakcji cech i klasyfikacji, poddawane są one serii zabiegów preprocessingowych w celu normalizacji i oczyszczenia danych. Wykorzystano do tego bibliotekę NLTK (Natural Language Toolkit). Kolejność operacji jest następująca:
+\begin{itemize}
+    \item \textbf{Konwersja do małych liter:} Wszystkie litery w tekście recenzji są zamieniane na małe, aby zapewnić spójność.
+    \item \textbf{Usunięcie znaków specjalnych i interpunkcji:} Znaki, które nie są literami ani cyframi (dla BERT) lub nie są literami (dla modeli klasycznych), oraz znaki interpunkcyjne są usuwane. Dla modeli klasycznych (Naiwny Bayes, SVM) usuwane są wszystkie znaki niebędące literami i spacjami (\texttt{re.sub(r'[^a-z\s]', '', text)}). Dla modelu BERT, zachowywane są cyfry, a usuwane są pozostałe znaki specjalne (\texttt{re.sub(r'[^a-z0-9\s]', '', text)}), ponieważ mogą one nieść pewne informacje dla modelu transformera.
+    \item \textbf{Tokenizacja tekstu:} Oczyszczony tekst jest dzielony na pojedyncze słowa (tokeny) za pomocą funkcji \texttt{word\_tokenize} z biblioteki NLTK.
+    \item \textbf{Usunięcie stop words:} Powszechnie występujące słowa, które zazwyczaj nie niosą istotnego znaczenia dla analizy sentymentu (np. "the", "a", "is"), są usuwane. Użyto standardowej listy angielskich stop words z NLTK (\texttt{stopwords.words('english')}). Słowa są usuwane tylko jeśli są alfabetyczne.
+    \item \textbf{Lematyzacja słów:} Słowa są sprowadzane do ich podstawowej formy (lematu) za pomocą \texttt{WordNetLemmatizer} z NLTK. Na przykład, "running" staje się "run". Ten krok pomaga w redukcji wymiarowości przestrzeni cech poprzez grupowanie różnych form tego samego słowa. Lematyzowane są tylko tokeny alfabetyczne.
+\end{itemize}
+Należy zaznaczyć, że choć te kroki są standardowe, w przypadku modelu BERT agresywne usuwanie stop words czy lematyzacja mogą czasami być mniej korzystne, ponieważ model ten jest trenowany na pełnych zdaniach i potrafi samodzielnie wyciągać kontekst. Jednakże, dla spójności z modelami klasycznymi i zgodnie z założeniami, preprocessing ten został zastosowany również dla danych wejściowych BERTa w przedstawionym eksperymencie.
+
+\subsubsection{Ekstrakcja cech}
+Po przeprowadzeniu preprocessingu, teksty są transformowane do postaci numerycznej odpowiedniej dla modeli uczenia maszynowego:
+\begin{itemize}
+    \item \textbf{TF-IDF (Term Frequency-Inverse Document Frequency):} Dla klasyfikatorów Naiwny Bayes oraz SVM, przetworzone teksty recenzji są przekształcane w numeryczne wektory cech za pomocą metody TF-IDF. Wykorzystano implementację \texttt{TfidfVectorizer} z biblioteki Scikit-learn. Parametr \texttt{max\_features=5000} ogranicza liczbę uwzględnianych cech do 5000 najczęściej występujących słów (n-gramów) w całym korpusie treningowym. TF-IDF przypisuje wagi słowom, które są częste w danym dokumencie, ale rzadkie w całym zbiorze dokumentów, co pomaga wyróżnić istotne terminy.
+    \item \textbf{BERT Tokenization and Embeddings:} Dla modelu BERT, proces ekstrakcji cech jest bardziej złożony i zintegrowany z architekturą modelu.
+    \begin{itemize}
+        \item \textbf{Tokenizacja BERTa:} Przetworzone teksty są najpierw tokenizowane przy użyciu specjalnego tokenizatora dostosowanego do modelu BERT, w tym przypadku \texttt{AutoTokenizer.from\_pretrained("google-bert/bert-base-uncased")}. Tokenizer ten dzieli tekst na tokeny (które mogą być słowami lub częściami słów - subwords), dodaje specjalne tokeny (jak \texttt{[CLS]} na początku sekwencji i \texttt{[SEP]} na końcu), oraz mapuje tokeny na ich numeryczne ID z predefiniowanego słownika modelu.
+        \item \textbf{Padding i Truncation:} Sekwencje tokenów są następnie ujednolicane do tej samej długości (\texttt{MAX\_LEN = 128}) poprzez dodanie tokenów wypełniających (padding) do krótszych sekwencji lub obcięcie (truncation) dłuższych sekwencji.
+        \item \textbf{Attention Masks:} Generowane są również maski uwagi, które informują model, które tokeny są rzeczywistymi danymi, a które wypełniaczami, aby model nie brał pod uwagę wypełniaczy podczas obliczeń.
+        \item \textbf{Embeddings:} Tak przygotowane dane wejściowe (ID tokenów, maski uwagi) są przekazywane do modelu BERT, który w swojej pierwszej warstwie przekształca ID tokenów na gęste wektory numeryczne (embeddings). Te embeddingi są kontekstowe, co oznacza, że reprezentacja danego tokenu zależy od otaczających go tokenów w sekwencji. Model jest następnie trenowany (fine-tuned) na tych embeddingach do zadania klasyfikacji sentymentu.
+    \end{itemize}
 \end{itemize}
 
-Następnie teksty są przekształcane do reprezentacji TF-IDF (Term Frequency-Inverse Document Frequency) z wykorzystaniem maksymalnie 5000 cech.
-
-\section{Klasyfikatory}
+\subsubsection{Klasyfikatory}
 
 \subsubsection{Naiwny Bayes}
-Naiwny Bayes to probabilistyczny klasyfikator oparty na twierdzeniu Bayesa. Zakłada on niezależność cech, co upraszcza obliczenia, ale może nie odzwierciedlać rzeczywistych zależności w danych. Jest szybki w trenowaniu i często skuteczny w klasyfikacji tekstu.
+Naiwny Bayes to probabilistyczny klasyfikator oparty na twierdzeniu Bayesa. W naszym eksperymencie używamy wariantu Multinomial Naive Bayes (MultinomialNB), który jest szczególnie dobrze dopasowany do danych tekstowych reprezentowanych jako częstości słów (lub TF-IDF). Zakłada on niezależność cech, co upraszcza obliczenia, ale może nie odzwierciedlać rzeczywistych zależności w danych. Jest szybki w trenowaniu i często skuteczny w klasyfikacji tekstu.
 
 \subsubsection{SVM (Support Vector Machine)}
 SVM to klasyfikator, który znajduje hiperpłaszczyznę maksymalnie oddzielającą klasy w przestrzeni cech. W naszym eksperymencie używamy jądra liniowego. SVM jest szczególnie skuteczny w przypadku danych o wysokiej wymiarowości, takich jak tekst.
 
 \subsubsection{BERT}
-BERT (Bidirectional Encoder Representations from Transformers) to model oparty na architekturze Transformer, wstępnie wytrenowany na dużych korpusach tekstu. W naszym eksperymencie wykorzystujemy model \texttt{bert-base-uncased}, który został dostrojony (fine-tuned) do zadania klasyfikacji sekwencji. BERT przetwarza całe sekwencje słów jednocześnie, uwzględniając kontekst dwukierunkowo, co pozwala na głębsze zrozumienie znaczenia tekstu. Model ten jest znany z osiągania najnowocześniejszych wyników w wielu zadaniach przetwarzania języka naturalnego, w tym w analizie sentymentu.
+BERT (Bidirectional Encoder Representations from Transformers) to model oparty na architekturze Transformer, wstępnie wytrenowany na dużych korpusach tekstu. W naszym eksperymencie wykorzystujemy model \texttt{google-bert/bert-base-uncased} (dostępny poprzez bibliotekę Transformers jako \texttt{AutoModelForSequenceClassification}), który został dostrojony (fine-tuned) do zadania klasyfikacji sekwencji z trzema etykietami wyjściowymi. BERT przetwarza całe sekwencje słów jednocześnie, uwzględniając kontekst dwukierunkowo, co pozwala na głębsze zrozumienie znaczenia tekstu. Model ten jest znany z osiągania najnowocześniejszych wyników w wielu zadaniach przetwarzania języka naturalnego, w tym w analizie sentymentu. Zastosowano learning rate $2 \cdot 10^{-5}$ oraz trenowano model przez 3 epoki.
 
 \subsection{Metryki oceny}
 Do oceny skuteczności klasyfikatorów używamy następujących metryk:
@@ -139,6 +161,9 @@ Mierzy zdolność modelu do znalezienia wszystkich pozytywnych przypadków:
 
 \subsection{Analiza statystyczna}
 Aby określić, czy różnice w skuteczności klasyfikatorów są statystycznie istotne, przeprowadzamy test t-Studenta dla par próbek. Test ten pozwala na porównanie średnich wyników różnych klasyfikatorów i określenie, czy obserwowane różnice są istotne statystycznie.
+
+
+
 \begin{credits}
 
 \end{credits}
