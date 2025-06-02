@@ -1,11 +1,8 @@
-import kagglehub
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report
-import zipfile
-import os
 import re
 import nltk
 from nltk.corpus import stopwords
@@ -24,10 +21,6 @@ try:
     WordNetLemmatizer().lemmatize("test")
 except LookupError:
     nltk.download('wordnet')
-try:
-    nltk.data.find('tokenizers/punkt_tab')
-except LookupError:
-    nltk.download('punkt_tab')
 
 csv_file_name = "tripadvisor_hotel_reviews.csv"
 df = pd.read_csv(csv_file_name)
@@ -76,11 +69,12 @@ y_pred = svm_model.predict(X_test_tfidf)
 print("\nModel Evaluation:")
 target_names = sorted(y_test.unique())
 print(classification_report(y_test, y_pred, target_names=target_names))
+
 new_reviews = [
-       "This hotel was fantastic, the service was excellent!",
-        "The room was dirty and the staff were rude.",
-        "It was an okay experience, nothing special."
-    ]
+    "This hotel was fantastic, the service was excellent!",
+    "The room was dirty and the staff were rude.",
+    "It was an okay experience, nothing special."
+]
 
 print("\nPreprocessing new reviews for prediction...")
 processed_new_reviews = [preprocess_text(review) for review in new_reviews]

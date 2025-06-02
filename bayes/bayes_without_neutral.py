@@ -3,7 +3,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report
-import os
 import re
 import nltk
 from nltk.corpus import stopwords
@@ -22,10 +21,6 @@ try:
     WordNetLemmatizer().lemmatize("test")
 except LookupError:
     nltk.download('wordnet')
-try:
-    nltk.data.find('tokenizers/punkt_tab')
-except LookupError:
-    nltk.download('punkt_tab')
 
 
 csv_file_name = "tripadvisor_hotel_reviews.csv"

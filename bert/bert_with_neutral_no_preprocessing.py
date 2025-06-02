@@ -9,12 +9,6 @@ from torch.optim import AdamW
 import numpy as np
 import os
 # NLTK related imports are removed as preprocessing is skipped
-# import re
-# import nltk
-# from nltk.corpus import stopwords
-# from nltk.tokenize import word_tokenize
-# from nltk.stem import WordNetLemmatizer
-
 # NLTK download blocks are removed
 
 MODEL_NAME = "google-bert/bert-base-uncased"

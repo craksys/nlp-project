@@ -1,5 +1,4 @@
 import pandas as pd
-import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
@@ -27,10 +26,6 @@ try:
     WordNetLemmatizer().lemmatize("test")
 except LookupError:
     nltk.download('wordnet')
-try:
-    nltk.data.find('tokenizers/punkt_tab')
-except LookupError:
-    nltk.download('punkt_tab')
 
 
 MODEL_NAME = "google-bert/bert-base-uncased"

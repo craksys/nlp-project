@@ -26,10 +26,6 @@ try:
     WordNetLemmatizer().lemmatize("test")
 except LookupError:
     nltk.download('wordnet')
-try:
-    nltk.data.find('tokenizers/punkt_tab')
-except LookupError:
-    nltk.download('punkt_tab')
 
 
 MODEL_NAME = "google-bert/bert-base-uncased"
