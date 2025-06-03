@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support, roc_auc_score
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
@@ -209,6 +209,7 @@ class BERTClassifier:
         print("\nEvaluating model...")
         model.eval()
         all_preds = []
+        all_pred_probas = []
         all_true_labels = []
         
         for batch in test_dataloader:
@@ -228,22 +229,31 @@ class BERTClassifier:
             label_ids = b_labels.to('cpu').numpy()
             
             all_preds.extend(np.argmax(logits, axis=1).flatten())
+            all_pred_probas.extend(logits)
             all_true_labels.extend(label_ids.flatten())
         
         # Convert predictions back to original labels
         y_pred = label_encoder.inverse_transform(all_preds)
         y_test = label_encoder.inverse_transform(all_true_labels)
+        y_pred_proba = np.array(all_pred_probas)
         
         # Calculate metrics
         accuracy = accuracy_score(y_test, y_pred)
         precision, recall, f1, _ = precision_recall_fscore_support(
             y_test, y_pred, average='weighted')
         
+        # Calculate ROC AUC
+        if mode == 'without_neutral':  # Binary classification
+            roc_auc = roc_auc_score(y_test, y_pred_proba[:, 1])
+        else:  # Multi-class classification
+            roc_auc = roc_auc_score(y_test, y_pred_proba, multi_class='ovr')
+        
         metrics = {
             'accuracy': accuracy,
             'precision': precision,
             'recall': recall,
             'f1': f1,
+            'roc_auc': roc_auc,
             'classification_report': classification_report(y_test, y_pred, target_names=label_encoder.classes_)
         }
         

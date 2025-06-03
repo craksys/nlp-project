@@ -2,15 +2,15 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC
-from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support, roc_auc_score
 import re
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
-class SVMClassifier:
+class NaiveBayesClassifier:
     def __init__(self, data_path="tripadvisor_hotel_reviews.csv"):
         self.data_path = data_path
         self.df = pd.read_csv(data_path)
@@ -88,7 +88,7 @@ class SVMClassifier:
     
     def train_and_evaluate(self, mode='1_5', test_size=0.2, random_state=42, X_train=None, X_test=None, y_train=None, y_test=None):
         """
-        Train the SVM model and evaluate its performance
+        Train the Naive Bayes model and evaluate its performance
         Returns: model, vectorizer, metrics dictionary, and predictions
         """
         if X_train is None or X_test is None or y_train is None or y_test is None:
@@ -101,24 +101,32 @@ class SVMClassifier:
         X_test_tfidf = vectorizer.transform(X_test)
         
         # Train the model
-        print("\nTraining SVM model...")
-        model = SVC(kernel='linear', C=1.0, random_state=random_state)
+        print("\nTraining Naive Bayes model...")
+        model = MultinomialNB()
         model.fit(X_train_tfidf, y_train)
-        print("SVM model trained.")
+        print("Naive Bayes model trained.")
         
         # Make predictions
         y_pred = model.predict(X_test_tfidf)
+        y_pred_proba = model.predict_proba(X_test_tfidf)
         
         # Calculate metrics
         accuracy = accuracy_score(y_test, y_pred)
         precision, recall, f1, _ = precision_recall_fscore_support(
             y_test, y_pred, average='weighted')
         
+        # Calculate ROC AUC
+        if mode == 'without_neutral':  # Binary classification
+            roc_auc = roc_auc_score(y_test, y_pred_proba[:, 1])
+        else:  # Multi-class classification
+            roc_auc = roc_auc_score(y_test, y_pred_proba, multi_class='ovr')
+        
         metrics = {
             'accuracy': accuracy,
             'precision': precision,
             'recall': recall,
             'f1': f1,
+            'roc_auc': roc_auc,
             'classification_report': classification_report(y_test, y_pred, target_names=sorted(y_test.unique()))
         }
         
