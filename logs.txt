@@ -1,0 +1,2048 @@
+Dataset loaded successfully.
+Dataset head:
+                                               Review  Rating
+0  nice hotel expensive parking got good deal sta...       4
+1  ok nothing special charge diamond member hilto...       2
+2  nice rooms not 4* experience hotel monaco seat...       3
+3  unique, great stay, wonderful time hotel monac...       5
+4  great stay great stay, went seahawk game aweso...       5
+
+Dataset info:
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 20491 entries, 0 to 20490
+Data columns (total 2 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   Review  20491 non-null  object
+ 1   Rating  20491 non-null  int64 
+dtypes: int64(1), object(1)
+memory usage: 320.3+ KB
+Dataset loaded successfully.
+Dataset head:
+                                               Review  Rating
+0  nice hotel expensive parking got good deal sta...       4
+1  ok nothing special charge diamond member hilto...       2
+2  nice rooms not 4* experience hotel monaco seat...       3
+3  unique, great stay, wonderful time hotel monac...       5
+4  great stay great stay, went seahawk game aweso...       5
+
+Dataset info:
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 20491 entries, 0 to 20490
+Data columns (total 2 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   Review  20491 non-null  object
+ 1   Rating  20491 non-null  int64 
+dtypes: int64(1), object(1)
+memory usage: 320.3+ KB
+Using device: cuda
+
+Experiment 1: Model Comparison within Modes
+==================================================
+
+Running experiments for mode: 1_5
+==================================================
+
+Running 4-fold cross validation for mode: 1_5
+==================================================
+
+Preprocessing reviews...
+Preprocessing complete.
+Example of processed review:
+                                               Review  \
+0  nice hotel expensive parking got good deal sta...   
+1  ok nothing special charge diamond member hilto...   
+2  nice rooms not 4* experience hotel monaco seat...   
+3  unique, great stay, wonderful time hotel monac...   
+4  great stay great stay, went seahawk game aweso...   
+
+                                    Processed_Review  
+0  nice hotel expensive parking got good deal sta...  
+1  ok nothing special charge diamond member hilto...  
+2  nice room experience hotel monaco seattle good...  
+3  unique great stay wonderful time hotel monaco ...  
+4  great stay great stay went seahawk game awesom...  
+
+Rating distribution:
+ Sentiment
+1    1421
+2    1793
+3    2184
+4    6039
+5    9054
+Name: count, dtype: int64
+
+Training BERT model (single split)...
+
+Encoded labels: {'1': np.int64(0), '2': np.int64(1), '3': np.int64(2), '4': np.int64(3), '5': np.int64(4)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+/usr/local/lib/python3.11/dist-packages/huggingface_hub/utils/_auth.py:94: UserWarning: 
+The secret `HF_TOKEN` does not exist in your Colab secrets.
+To authenticate with the Hugging Face Hub, create a token in your settings tab (https://huggingface.co/settings/tokens), set it as secret in your Google Colab and restart your session.
+You will be able to reuse this secret in all of your notebooks.
+Please note that authentication is recommended but still optional to access public models or datasets.
+  warnings.warn(
+Tokenizing training data...
+Tokenizing test data...
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 513.
+  Batch 100 of 513.
+  Batch 150 of 513.
+  Batch 200 of 513.
+  Batch 250 of 513.
+  Batch 300 of 513.
+  Batch 350 of 513.
+  Batch 400 of 513.
+  Batch 450 of 513.
+  Batch 500 of 513.
+  Average training loss: 0.93
+
+Training complete.
+
+Evaluating model...
+
+Fold 1/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 2/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 3/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 4/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Wilcoxon Signed-Rank Test Results:
+==================================================
+
+ACCURACY Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6167
+Mean Naive Bayes: 0.5498
+------------------------------
+
+SVM vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6167
+Mean BERT: 0.6482
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.5498
+Mean SVM: 0.6167
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.5498
+Mean BERT: 0.6482
+------------------------------
+
+BERT vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6482
+Mean SVM: 0.6167
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6482
+Mean Naive Bayes: 0.5498
+------------------------------
+
+PRECISION Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6068
+Mean Naive Bayes: 0.5043
+------------------------------
+
+SVM vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6068
+Mean BERT: 0.6324
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.5043
+Mean SVM: 0.6068
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.5043
+Mean BERT: 0.6324
+------------------------------
+
+BERT vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6324
+Mean SVM: 0.6068
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6324
+Mean Naive Bayes: 0.5043
+------------------------------
+
+RECALL Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6167
+Mean Naive Bayes: 0.5498
+------------------------------
+
+SVM vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6167
+Mean BERT: 0.6482
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.5498
+Mean SVM: 0.6167
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.5498
+Mean BERT: 0.6482
+------------------------------
+
+BERT vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6482
+Mean SVM: 0.6167
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6482
+Mean Naive Bayes: 0.5498
+------------------------------
+
+F1 Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6092
+Mean Naive Bayes: 0.4946
+------------------------------
+
+SVM vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.6092
+Mean BERT: 0.6371
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.4946
+Mean SVM: 0.6092
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.4946
+Mean BERT: 0.6371
+------------------------------
+
+BERT vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6371
+Mean SVM: 0.6092
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.6371
+Mean Naive Bayes: 0.4946
+------------------------------
+
+Significance Matrix for 1_5 mode:
+==================================================
+Legend: 1 = row model significantly better than column model
+       -1 = row model significantly worse than column model
+        0 = no significant difference
+==================================================
+
+ACCURACY:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+PRECISION:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+RECALL:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+F1:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+Cross-validation Summary Statistics:
+==================================================
+
+SVM:
+accuracy: 0.6167 ± 0.0067
+precision: 0.6068 ± 0.0090
+recall: 0.6167 ± 0.0067
+f1: 0.6092 ± 0.0080
+
+Naive Bayes:
+accuracy: 0.5498 ± 0.0097
+precision: 0.5043 ± 0.0154
+recall: 0.5498 ± 0.0097
+f1: 0.4946 ± 0.0119
+
+BERT:
+accuracy: 0.6482 ± 0.0000
+precision: 0.6324 ± 0.0000
+recall: 0.6482 ± 0.0000
+f1: 0.6371 ± 0.0000
+
+Running experiments for mode: with_neutral
+==================================================
+
+Running 4-fold cross validation for mode: with_neutral
+==================================================
+
+Preprocessing reviews...
+Preprocessing complete.
+Example of processed review:
+                                               Review  \
+0  nice hotel expensive parking got good deal sta...   
+1  ok nothing special charge diamond member hilto...   
+2  nice rooms not 4* experience hotel monaco seat...   
+3  unique, great stay, wonderful time hotel monac...   
+4  great stay great stay, went seahawk game aweso...   
+
+                                    Processed_Review  
+0  nice hotel expensive parking got good deal sta...  
+1  ok nothing special charge diamond member hilto...  
+2  nice room experience hotel monaco seattle good...  
+3  unique great stay wonderful time hotel monaco ...  
+4  great stay great stay went seahawk game awesom...  
+
+Rating distribution:
+ Sentiment
+negative     3214
+neutral      2184
+positive    15093
+Name: count, dtype: int64
+
+Training BERT model (single split)...
+
+Encoded labels: {'negative': np.int64(0), 'neutral': np.int64(1), 'positive': np.int64(2)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+Tokenizing training data...
+Tokenizing test data...
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 513.
+  Batch 100 of 513.
+  Batch 150 of 513.
+  Batch 200 of 513.
+  Batch 250 of 513.
+  Batch 300 of 513.
+  Batch 350 of 513.
+  Batch 400 of 513.
+  Batch 450 of 513.
+  Batch 500 of 513.
+  Average training loss: 0.44
+
+Training complete.
+
+Evaluating model...
+
+Fold 1/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 2/4
+------------------------------
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 3/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 4/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Wilcoxon Signed-Rank Test Results:
+==================================================
+
+ACCURACY Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8573
+Mean Naive Bayes: 0.8199
+------------------------------
+
+SVM vs BERT:
+p-value: 0.2500
+Significant difference: No
+Mean SVM: 0.8573
+Mean BERT: 0.8609
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8199
+Mean SVM: 0.8573
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8199
+Mean BERT: 0.8609
+------------------------------
+
+BERT vs SVM:
+p-value: 0.2500
+Significant difference: No
+Mean BERT: 0.8609
+Mean SVM: 0.8573
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8609
+Mean Naive Bayes: 0.8199
+------------------------------
+
+PRECISION Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8322
+Mean Naive Bayes: 0.7536
+------------------------------
+
+SVM vs BERT:
+p-value: 0.6250
+Significant difference: No
+Mean SVM: 0.8322
+Mean BERT: 0.8350
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.7536
+Mean SVM: 0.8322
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.7536
+Mean BERT: 0.8350
+------------------------------
+
+BERT vs SVM:
+p-value: 0.6250
+Significant difference: No
+Mean BERT: 0.8350
+Mean SVM: 0.8322
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8350
+Mean Naive Bayes: 0.7536
+------------------------------
+
+RECALL Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8573
+Mean Naive Bayes: 0.8199
+------------------------------
+
+SVM vs BERT:
+p-value: 0.2500
+Significant difference: No
+Mean SVM: 0.8573
+Mean BERT: 0.8609
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8199
+Mean SVM: 0.8573
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8199
+Mean BERT: 0.8609
+------------------------------
+
+BERT vs SVM:
+p-value: 0.2500
+Significant difference: No
+Mean BERT: 0.8609
+Mean SVM: 0.8573
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8609
+Mean Naive Bayes: 0.8199
+------------------------------
+
+F1 Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8378
+Mean Naive Bayes: 0.7662
+------------------------------
+
+SVM vs BERT:
+p-value: 0.2500
+Significant difference: No
+Mean SVM: 0.8378
+Mean BERT: 0.8425
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.7662
+Mean SVM: 0.8378
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.7662
+Mean BERT: 0.8425
+------------------------------
+
+BERT vs SVM:
+p-value: 0.2500
+Significant difference: No
+Mean BERT: 0.8425
+Mean SVM: 0.8378
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8425
+Mean Naive Bayes: 0.7662
+------------------------------
+
+Significance Matrix for with_neutral mode:
+==================================================
+Legend: 1 = row model significantly better than column model
+       -1 = row model significantly worse than column model
+        0 = no significant difference
+==================================================
+
+ACCURACY:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+PRECISION:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+RECALL:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+F1:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+Cross-validation Summary Statistics:
+==================================================
+
+SVM:
+accuracy: 0.8573 ± 0.0035
+precision: 0.8322 ± 0.0051
+recall: 0.8573 ± 0.0035
+f1: 0.8378 ± 0.0045
+
+Naive Bayes:
+accuracy: 0.8199 ± 0.0045
+precision: 0.7536 ± 0.0296
+recall: 0.8199 ± 0.0045
+f1: 0.7662 ± 0.0052
+
+BERT:
+accuracy: 0.8609 ± 0.0000
+precision: 0.8350 ± 0.0000
+recall: 0.8609 ± 0.0000
+f1: 0.8425 ± 0.0000
+
+Running experiments for mode: without_neutral
+==================================================
+
+Running 4-fold cross validation for mode: without_neutral
+==================================================
+
+Preprocessing reviews...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+Preprocessing complete.
+Example of processed review:
+                                               Review  \
+0  nice hotel expensive parking got good deal sta...   
+1  ok nothing special charge diamond member hilto...   
+2  nice rooms not 4* experience hotel monaco seat...   
+3  unique, great stay, wonderful time hotel monac...   
+4  great stay great stay, went seahawk game aweso...   
+
+                                    Processed_Review  
+0  nice hotel expensive parking got good deal sta...  
+1  ok nothing special charge diamond member hilto...  
+2  nice room experience hotel monaco seattle good...  
+3  unique great stay wonderful time hotel monaco ...  
+4  great stay great stay went seahawk game awesom...  
+
+Rating distribution:
+ Sentiment
+negative     5398
+positive    15093
+Name: count, dtype: int64
+
+Training BERT model (single split)...
+
+Encoded labels: {'negative': np.int64(0), 'positive': np.int64(1)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+Tokenizing training data...
+Tokenizing test data...
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 513.
+  Batch 100 of 513.
+  Batch 150 of 513.
+  Batch 200 of 513.
+  Batch 250 of 513.
+  Batch 300 of 513.
+  Batch 350 of 513.
+  Batch 400 of 513.
+  Batch 450 of 513.
+  Batch 500 of 513.
+  Average training loss: 0.29
+
+Training complete.
+
+Evaluating model...
+
+Fold 1/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 2/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 3/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Fold 4/4
+------------------------------
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Wilcoxon Signed-Rank Test Results:
+==================================================
+
+ACCURACY Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8975
+Mean Naive Bayes: 0.8628
+------------------------------
+
+SVM vs BERT:
+p-value: 0.8750
+Significant difference: No
+Mean SVM: 0.8975
+Mean BERT: 0.8978
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8628
+Mean SVM: 0.8975
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8628
+Mean BERT: 0.8978
+------------------------------
+
+BERT vs SVM:
+p-value: 0.8750
+Significant difference: No
+Mean BERT: 0.8978
+Mean SVM: 0.8975
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8978
+Mean Naive Bayes: 0.8628
+------------------------------
+
+PRECISION Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8954
+Mean Naive Bayes: 0.8675
+------------------------------
+
+SVM vs BERT:
+p-value: 0.8750
+Significant difference: No
+Mean SVM: 0.8954
+Mean BERT: 0.8958
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8675
+Mean SVM: 0.8954
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8675
+Mean BERT: 0.8958
+------------------------------
+
+BERT vs SVM:
+p-value: 0.8750
+Significant difference: No
+Mean BERT: 0.8958
+Mean SVM: 0.8954
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8958
+Mean Naive Bayes: 0.8675
+------------------------------
+
+RECALL Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8975
+Mean Naive Bayes: 0.8628
+------------------------------
+
+SVM vs BERT:
+p-value: 0.8750
+Significant difference: No
+Mean SVM: 0.8975
+Mean BERT: 0.8978
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8628
+Mean SVM: 0.8975
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8628
+Mean BERT: 0.8978
+------------------------------
+
+BERT vs SVM:
+p-value: 0.8750
+Significant difference: No
+Mean BERT: 0.8978
+Mean SVM: 0.8975
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8978
+Mean Naive Bayes: 0.8628
+------------------------------
+
+F1 Comparison:
+
+SVM vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean SVM: 0.8952
+Mean Naive Bayes: 0.8502
+------------------------------
+
+SVM vs BERT:
+p-value: 1.0000
+Significant difference: No
+Mean SVM: 0.8952
+Mean BERT: 0.8952
+------------------------------
+
+Naive Bayes vs SVM:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8502
+Mean SVM: 0.8952
+------------------------------
+
+Naive Bayes vs BERT:
+p-value: 0.1250
+Significant difference: No
+Mean Naive Bayes: 0.8502
+Mean BERT: 0.8952
+------------------------------
+
+BERT vs SVM:
+p-value: 1.0000
+Significant difference: No
+Mean BERT: 0.8952
+Mean SVM: 0.8952
+------------------------------
+
+BERT vs Naive Bayes:
+p-value: 0.1250
+Significant difference: No
+Mean BERT: 0.8952
+Mean Naive Bayes: 0.8502
+------------------------------
+
+Significance Matrix for without_neutral mode:
+==================================================
+Legend: 1 = row model significantly better than column model
+       -1 = row model significantly worse than column model
+        0 = no significant difference
+==================================================
+
+ACCURACY:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+PRECISION:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+RECALL:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+F1:
+--------------------------------------------------
+Model          SVM            Naive Bayes    BERT           
+------------------------------------------------------------
+SVM            N/A            0 (ns)         0 (ns)         
+Naive Bayes    0 (ns)         N/A            0 (ns)         
+BERT           0 (ns)         0 (ns)         N/A            
+
+
+Cross-validation Summary Statistics:
+==================================================
+
+SVM:
+accuracy: 0.8975 ± 0.0041
+precision: 0.8954 ± 0.0042
+recall: 0.8975 ± 0.0041
+f1: 0.8952 ± 0.0045
+
+Naive Bayes:
+accuracy: 0.8628 ± 0.0039
+precision: 0.8675 ± 0.0035
+recall: 0.8628 ± 0.0039
+f1: 0.8502 ± 0.0047
+
+BERT:
+accuracy: 0.8978 ± 0.0000
+precision: 0.8958 ± 0.0000
+recall: 0.8978 ± 0.0000
+f1: 0.8952 ± 0.0000
+
+Experiment 2: Mode Comparison for Each Model
+==================================================
+
+SVM Mode Comparison:
+
+ACCURACY:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6167 ± 0.0067
+with_neutral: 0.8573 ± 0.0035
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6167 ± 0.0067
+without_neutral: 0.8975 ± 0.0041
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8573 ± 0.0035
+without_neutral: 0.8975 ± 0.0041
+------------------------------
+
+PRECISION:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6068 ± 0.0090
+with_neutral: 0.8322 ± 0.0051
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6068 ± 0.0090
+without_neutral: 0.8954 ± 0.0042
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8322 ± 0.0051
+without_neutral: 0.8954 ± 0.0042
+------------------------------
+
+RECALL:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6167 ± 0.0067
+with_neutral: 0.8573 ± 0.0035
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6167 ± 0.0067
+without_neutral: 0.8975 ± 0.0041
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8573 ± 0.0035
+without_neutral: 0.8975 ± 0.0041
+------------------------------
+
+F1:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6092 ± 0.0080
+with_neutral: 0.8378 ± 0.0045
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6092 ± 0.0080
+without_neutral: 0.8952 ± 0.0045
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8378 ± 0.0045
+without_neutral: 0.8952 ± 0.0045
+------------------------------
+
+Naive Bayes Mode Comparison:
+
+ACCURACY:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.5498 ± 0.0097
+with_neutral: 0.8199 ± 0.0045
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.5498 ± 0.0097
+without_neutral: 0.8628 ± 0.0039
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8199 ± 0.0045
+without_neutral: 0.8628 ± 0.0039
+------------------------------
+
+PRECISION:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.5043 ± 0.0154
+with_neutral: 0.7536 ± 0.0296
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.5043 ± 0.0154
+without_neutral: 0.8675 ± 0.0035
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.7536 ± 0.0296
+without_neutral: 0.8675 ± 0.0035
+------------------------------
+
+RECALL:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.5498 ± 0.0097
+with_neutral: 0.8199 ± 0.0045
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.5498 ± 0.0097
+without_neutral: 0.8628 ± 0.0039
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8199 ± 0.0045
+without_neutral: 0.8628 ± 0.0039
+------------------------------
+
+F1:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.4946 ± 0.0119
+with_neutral: 0.7662 ± 0.0052
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.4946 ± 0.0119
+without_neutral: 0.8502 ± 0.0047
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.7662 ± 0.0052
+without_neutral: 0.8502 ± 0.0047
+------------------------------
+
+BERT Mode Comparison:
+
+ACCURACY:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6482 ± 0.0000
+with_neutral: 0.8609 ± 0.0000
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6482 ± 0.0000
+without_neutral: 0.8978 ± 0.0000
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8609 ± 0.0000
+without_neutral: 0.8978 ± 0.0000
+------------------------------
+
+PRECISION:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6324 ± 0.0000
+with_neutral: 0.8350 ± 0.0000
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6324 ± 0.0000
+without_neutral: 0.8958 ± 0.0000
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8350 ± 0.0000
+without_neutral: 0.8958 ± 0.0000
+------------------------------
+
+RECALL:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6482 ± 0.0000
+with_neutral: 0.8609 ± 0.0000
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6482 ± 0.0000
+without_neutral: 0.8978 ± 0.0000
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8609 ± 0.0000
+without_neutral: 0.8978 ± 0.0000
+------------------------------
+
+F1:
+
+1_5 vs with_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6371 ± 0.0000
+with_neutral: 0.8425 ± 0.0000
+------------------------------
+
+1_5 vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+1_5: 0.6371 ± 0.0000
+without_neutral: 0.8952 ± 0.0000
+------------------------------
+
+with_neutral vs without_neutral:
+p-value: 0.1250
+Significant difference: No
+with_neutral: 0.8425 ± 0.0000
+without_neutral: 0.8952 ± 0.0000
+------------------------------
+
+Experiment 3: Feature Impact Analysis
+==================================================
+
+Preprocessing reviews...
+Preprocessing complete.
+Example of processed review:
+                                               Review  \
+0  nice hotel expensive parking got good deal sta...   
+1  ok nothing special charge diamond member hilto...   
+2  nice rooms not 4* experience hotel monaco seat...   
+3  unique, great stay, wonderful time hotel monac...   
+4  great stay great stay, went seahawk game aweso...   
+
+                                    Processed_Review  
+0  nice hotel expensive parking got good deal sta...  
+1  ok nothing special charge diamond member hilto...  
+2  nice room experience hotel monaco seattle good...  
+3  unique great stay wonderful time hotel monaco ...  
+4  great stay great stay went seahawk game awesom...  
+
+Rating distribution:
+ Sentiment
+1    1421
+2    1793
+3    2184
+4    6039
+5    9054
+Name: count, dtype: int64
+
+Analyzing Model Features:
+==================================================
+
+Top TF-IDF Features by Class:
+------------------------------
+
+Class: 1
+room: 0.0714
+hotel: 0.0712
+nt: 0.0449
+stay: 0.0323
+night: 0.0312
+day: 0.0304
+told: 0.0279
+service: 0.0265
+dirty: 0.0258
+place: 0.0257
+worst: 0.0250
+bad: 0.0245
+like: 0.0240
+desk: 0.0240
+time: 0.0239
+resort: 0.0237
+staff: 0.0229
+got: 0.0223
+bed: 0.0220
+terrible: 0.0205
+
+Class: 2
+room: 0.0762
+hotel: 0.0669
+nt: 0.0465
+night: 0.0319
+day: 0.0304
+good: 0.0297
+service: 0.0290
+stay: 0.0277
+time: 0.0271
+resort: 0.0270
+like: 0.0247
+beach: 0.0246
+bed: 0.0245
+food: 0.0243
+staff: 0.0238
+nice: 0.0233
+told: 0.0226
+star: 0.0217
+desk: 0.0210
+stayed: 0.0210
+
+Class: 3
+hotel: 0.0746
+room: 0.0722
+good: 0.0470
+nt: 0.0430
+nice: 0.0368
+location: 0.0363
+night: 0.0329
+great: 0.0310
+clean: 0.0274
+ok: 0.0273
+small: 0.0269
+stay: 0.0260
+beach: 0.0256
+staff: 0.0251
+time: 0.0245
+day: 0.0241
+stayed: 0.0238
+breakfast: 0.0234
+bed: 0.0229
+area: 0.0228
+
+Class: 4
+hotel: 0.0786
+room: 0.0632
+great: 0.0509
+good: 0.0482
+nice: 0.0402
+location: 0.0383
+nt: 0.0357
+stay: 0.0331
+staff: 0.0325
+clean: 0.0317
+night: 0.0299
+breakfast: 0.0277
+restaurant: 0.0252
+time: 0.0251
+stayed: 0.0249
+beach: 0.0246
+day: 0.0241
+small: 0.0232
+place: 0.0230
+friendly: 0.0226
+
+Class: 5
+hotel: 0.0861
+room: 0.0541
+great: 0.0539
+staff: 0.0381
+stay: 0.0367
+location: 0.0325
+excellent: 0.0300
+nt: 0.0284
+stayed: 0.0275
+good: 0.0269
+night: 0.0261
+breakfast: 0.0251
+service: 0.0250
+time: 0.0249
+friendly: 0.0243
+place: 0.0243
+nice: 0.0241
+clean: 0.0236
+wonderful: 0.0231
+helpful: 0.0230
+
+Training SVM to analyze coefficients...
+
+Top SVM Coefficients by Class:
+------------------------------
+
+Class: 1
+worst: 3.5490
+avoid: 2.5635
+horrible: 2.2879
+terrible: 2.1082
+away: 2.0505
+dirty: 2.0395
+awful: 1.9636
+dump: 1.8750
+hell: 1.8469
+word: 1.8375
+place: 1.8108
+meeting: 1.8066
+plastic: 1.7116
+needless: 1.5043
+help: 1.4786
+stunk: 1.4655
+stuck: 1.4557
+experience: 1.4487
+sewer: 1.4466
+email: 1.4215
+
+Class: 2
+terrible: 2.4128
+worst: 2.3841
+dirty: 2.3594
+rude: 2.1981
+avoid: 2.0676
+joke: 1.8277
+smelly: 1.5064
+horrible: 1.4755
+unhelpful: 1.4412
+word: 1.4043
+lock: 1.3792
+needless: 1.3566
+management: 1.3529
+working: 1.3461
+travel: 1.3406
+unfriendly: 1.3387
+stolen: 1.3253
+mistake: 1.3156
+wait: 1.3115
+dump: 1.2601
+
+Class: 3
+dirty: 2.9731
+worst: 2.6509
+terrible: 2.5367
+horrible: 2.1736
+rude: 2.1321
+bad: 2.1107
+told: 1.8869
+avoid: 1.8604
+unhelpful: 1.7239
+unless: 1.6790
+joke: 1.5241
+disappointing: 1.4454
+charged: 1.4260
+awful: 1.4155
+unpleasant: 1.4150
+poor: 1.3801
+dump: 1.3537
+hell: 1.3453
+worse: 1.3191
+customer: 1.2912
+
+Class: 4
+worst: 3.0342
+dirty: 2.7727
+told: 2.3545
+rude: 2.2758
+terrible: 2.2745
+poor: 2.1635
+horrible: 1.9892
+avoid: 1.8483
+bad: 1.7990
+disappointing: 1.6419
+unhelpful: 1.6369
+unless: 1.6313
+loud: 1.5119
+smell: 1.5069
+management: 1.4839
+hour: 1.3415
+sick: 1.3408
+dump: 1.3280
+supposed: 1.3020
+hated: 1.2964
+
+Class: 5
+terrible: 2.0966
+work: 1.9942
+rude: 1.9742
+uncomfortable: 1.8936
+checked: 1.8623
+management: 1.8021
+filthy: 1.7401
+dirty: 1.7313
+wo: 1.7202
+worst: 1.6589
+disappointment: 1.5884
+told: 1.5748
+dingy: 1.5591
+hole: 1.5318
+esj: 1.5292
+construction: 1.5143
+unhelpful: 1.4880
+hanging: 1.4849
+barely: 1.4734
+stained: 1.4640
+
+Analyzing Review Length Impact:
+==================================================
+
+Analyzing Long reviews...
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Encoded labels: {'1': np.int64(0), '2': np.int64(1), '3': np.int64(2), '4': np.int64(3), '5': np.int64(4)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+Tokenizing training data...
+Tokenizing test data...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 128.
+  Batch 100 of 128.
+  Average training loss: 1.20
+
+Training complete.
+
+Evaluating model...
+
+Analyzing Very Long reviews...
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Encoded labels: {'1': np.int64(0), '2': np.int64(1), '3': np.int64(2), '4': np.int64(3), '5': np.int64(4)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+Tokenizing training data...
+Tokenizing test data...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 128.
+  Batch 100 of 128.
+  Average training loss: 1.28
+
+Training complete.
+
+Evaluating model...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Analyzing Short reviews...
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Encoded labels: {'1': np.int64(0), '2': np.int64(1), '3': np.int64(2), '4': np.int64(3), '5': np.int64(4)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+Tokenizing training data...
+Tokenizing test data...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 128.
+  Batch 100 of 128.
+  Average training loss: 1.14
+
+Training complete.
+
+Evaluating model...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+Analyzing Very Short reviews...
+
+Training SVM model...
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Training SVM model...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Training SVM model...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Training SVM model...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+SVM model trained.
+
+Training Naive Bayes model...
+Naive Bayes model trained.
+
+Encoded labels: {'1': np.int64(0), '2': np.int64(1), '3': np.int64(2), '4': np.int64(3), '5': np.int64(4)}
+
+Loading BERT tokenizer: google-bert/bert-base-uncased...
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib/python3.11/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+Tokenizing training data...
+Tokenizing test data...
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at google-bert/bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+Loading BERT model for sequence classification: google-bert/bert-base-uncased...
+
+Starting training...
+
+======== Epoch 1 / 1 ========
+  Batch 50 of 129.
+  Batch 100 of 129.
+  Average training loss: 1.06
+
+Training complete.
+
+Evaluating model...
+
+Review Length Impact Analysis:
+==================================================
+
+SVM Performance by Review Length:
+
+ACCURACY:
+Long: 0.5937 ± 0.0149
+Very Long: 0.5462 ± 0.0171
+Short: 0.6119 ± 0.0190
+Very Short: 0.6269 ± 0.0108
+
+PRECISION:
+Long: 0.5788 ± 0.0179
+Very Long: 0.5320 ± 0.0198
+Short: 0.5964 ± 0.0218
+Very Short: 0.6099 ± 0.0144
+
+RECALL:
+Long: 0.5937 ± 0.0149
+Very Long: 0.5462 ± 0.0171
+Short: 0.6119 ± 0.0190
+Very Short: 0.6269 ± 0.0108
+
+F1:
+Long: 0.5786 ± 0.0167
+Very Long: 0.5331 ± 0.0193
+Short: 0.5982 ± 0.0214
+Very Short: 0.6108 ± 0.0124
+
+Naive Bayes Performance by Review Length:
+
+ACCURACY:
+Long: 0.4598 ± 0.0124
+Very Long: 0.4509 ± 0.0195
+Short: 0.4937 ± 0.0086
+Very Short: 0.5207 ± 0.0078
+
+PRECISION:
+Long: 0.3581 ± 0.0369
+Very Long: 0.3898 ± 0.0085
+Short: 0.3792 ± 0.0484
+Very Short: 0.4241 ± 0.0069
+
+RECALL:
+Long: 0.4598 ± 0.0124
+Very Long: 0.4509 ± 0.0195
+Short: 0.4937 ± 0.0086
+Very Short: 0.5207 ± 0.0078
+
+F1:
+Long: 0.3365 ± 0.0157
+Very Long: 0.3654 ± 0.0246
+Short: 0.3734 ± 0.0101
+Very Short: 0.3973 ± 0.0113
+
+BERT Performance by Review Length:
+
+ACCURACY:
+Long: 0.5547 ± 0.0000
+Very Long: 0.5141 ± 0.0000
+Short: 0.5855 ± 0.0000
+Very Short: 0.6210 ± 0.0000
+
+PRECISION:
+Long: 0.5665 ± 0.0000
+Very Long: 0.4413 ± 0.0000
+Short: 0.5506 ± 0.0000
+Very Short: 0.5639 ± 0.0000
+
+RECALL:
+Long: 0.5547 ± 0.0000
+Very Long: 0.5141 ± 0.0000
+Short: 0.5855 ± 0.0000
+Very Short: 0.6210 ± 0.0000
+
+F1:
+Long: 0.4893 ± 0.0000
+Very Long: 0.4707 ± 0.0000
+Short: 0.5617 ± 0.0000
+Very Short: 0.5834 ± 0.0000

@@ -5,8 +5,6 @@ from svm import SVMClassifier
 from bayes import NaiveBayesClassifier
 from bert import BERTClassifier
 from sklearn.model_selection import KFold, train_test_split
-import matplotlib.pyplot as plt
-import seaborn as sns
 import re
 import nltk
 from nltk.corpus import stopwords
@@ -88,7 +86,7 @@ class ModelComparison:
             X, y, test_size=0.2, random_state=random_state, stratify=y)
         
         print("\nTraining BERT model (single split)...")
-        bert_model, bert_tokenizer, bert_metrics, _, _ = self.bert.train_and_evaluate(
+        _, _, bert_metrics, _, _ = self.bert.train_and_evaluate(
             mode=mode, X_train=X_train_bert, X_test=X_test_bert, 
             y_train=y_train_bert, y_test=y_test_bert)
         for metric in self.metrics:
@@ -101,12 +99,12 @@ class ModelComparison:
             X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
             y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
             
-            svm_model, svm_vectorizer, svm_metrics, _, _ = self.svm.train_and_evaluate(
+            _, _, svm_metrics, _, _ = self.svm.train_and_evaluate(
                 mode=mode, X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
             for metric in self.metrics:
                 cv_results['SVM'][metric].append(svm_metrics[metric])
             
-            nb_model, nb_vectorizer, nb_metrics, _, _ = self.bayes.train_and_evaluate(
+            _, _, nb_metrics, _, _ = self.bayes.train_and_evaluate(
                 mode=mode, X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
             for metric in self.metrics:
                 cv_results['Naive Bayes'][metric].append(nb_metrics[metric])
@@ -128,7 +126,7 @@ class ModelComparison:
                         scores1 = cv_results[model1][metric]
                         scores2 = cv_results[model2][metric]
                         
-                        statistic, p_value = stats.wilcoxon(scores1, scores2)
+                        _, p_value = stats.wilcoxon(scores1, scores2)
                         
                         if p_value < 0.05:
                             if np.mean(scores1) > np.mean(scores2):
@@ -166,36 +164,6 @@ class ModelComparison:
                     print(f"{mode}: {mean_value:.4f} ± {std_value:.4f}")
                 print("-" * 30)
     
-    def plot_metrics_by_mode(self, all_results):
-        """Create plots showing metrics across different modes for each model"""
-        plt.style.use('seaborn')
-        
-        for model in self.models:
-            plt.figure(figsize=(12, 6))
-            
-            data = []
-            for mode in self.modes:
-                for metric in self.metrics:
-                    mean_value = np.mean(all_results[mode][model][metric])
-                    data.append({
-                        'Mode': mode,
-                        'Metric': metric,
-                        'Value': mean_value
-                    })
-            
-            df = pd.DataFrame(data)
-            
-            sns.lineplot(data=df, x='Mode', y='Value', hue='Metric', marker='o')
-            plt.title(f'Metrics Across Modes - {model}')
-            plt.xlabel('Classification Mode')
-            plt.ylabel('Score')
-            plt.xticks(rotation=45)
-            plt.legend(title='Metric')
-            plt.tight_layout()
-            
-            plt.show()
-            plt.close()
-    
     def print_significance_matrix(self, significance_matrix, mode):
         """Print the significance matrix in a clear format"""
         print(f"\nSignificance Matrix for {mode} mode:")
@@ -215,7 +183,7 @@ class ModelComparison:
             
             for i, model1 in enumerate(self.models):
                 print(f"{model1}".ljust(15), end="")
-                for j, model2 in enumerate(self.models):
+                for j, _ in enumerate(self.models):
                     if i == j:
                         print("N/A".ljust(15), end="")
                     else:
@@ -326,20 +294,6 @@ class ModelComparison:
             top_indices = np.argsort(scores)[-20:]
             for idx in reversed(top_indices):
                 print(f"{feature_names[idx]}: {scores[idx]:.4f}")
-        
-        print("\nTraining SVM to analyze coefficients...")
-        svm_model = SVC(kernel='linear', C=1.0, probability=True)
-        svm_model.fit(X_train_tfidf, y_train)
-        
-        print("\nTop SVM Coefficients by Class:")
-        print("-" * 30)
-        
-        for i, class_label in enumerate(sorted(set(y_train))):
-            print(f"\nClass: {class_label}")
-            coef = svm_model.coef_[i].toarray().flatten()
-            top_indices = np.argsort(coef)[-20:]
-            for idx in reversed(top_indices):
-                print(f"{feature_names[idx]}: {coef[idx]:.4f}")
     
     def analyze_review_length_impact(self, X, y, mode):
         print("\nAnalyzing Review Length Impact:")
@@ -349,7 +303,6 @@ class ModelComparison:
         
         length_categories = pd.qcut(review_lengths, q=4, labels=['Very Short', 'Short', 'Long', 'Very Long'])
         
-        # Remove ROC AUC from metrics for this analysis
         metrics = ['accuracy', 'precision', 'recall', 'f1']
         
         length_results = {model: {category: {metric: [] for metric in metrics} 
@@ -415,8 +368,6 @@ class ModelComparison:
                         print(f"{category}: {mean_score:.4f} ± {std_score:.4f}")
                     else:
                         print(f"{category}: No results available")
-        
-        self.plot_length_impact(length_results)
     
     def analyze_bert_misclassifications(self, X_test, y_test, mode):
         """Analyze BERT misclassifications to understand challenging cases"""
@@ -450,46 +401,6 @@ class ModelComparison:
             print(f"Average Word Length: {np.mean([len(w) for w in words]):.2f}")
             print(f"Unique Words: {len(set(words))}")
             print("-" * 30)
-    
-    def plot_length_impact(self, length_results):
-        """Create visualization for review length impact analysis"""
-        plt.style.use('seaborn')
-        
-        for model in self.models:
-            plt.figure(figsize=(12, 6))
-            
-            data = []
-            for category in ['Very Short', 'Short', 'Long', 'Very Long']:
-                for metric in self.metrics:
-                    scores = length_results[model][category][metric]
-                    mean_score = np.mean(scores)
-                    std_score = np.std(scores)
-                    data.append({
-                        'Category': category,
-                        'Metric': metric,
-                        'Score': mean_score,
-                        'Std': std_score
-                    })
-            
-            df = pd.DataFrame(data)
-            
-            ax = sns.barplot(data=df, x='Category', y='Score', hue='Metric')
-            
-            for i, category in enumerate(df['Category'].unique()):
-                for j, metric in enumerate(df['Metric'].unique()):
-                    mask = (df['Category'] == category) & (df['Metric'] == metric)
-                    score = df.loc[mask, 'Score'].iloc[0]
-                    std = df.loc[mask, 'Std'].iloc[0]
-                    ax.errorbar(i, score, yerr=std, fmt='none', color='black', capsize=5)
-            
-            plt.title(f'Review Length Impact on {model} Performance')
-            plt.xlabel('Review Length Category')
-            plt.ylabel('Score')
-            plt.legend(title='Metric')
-            plt.tight_layout()
-            
-            plt.show()
-            plt.close()
     
     def run_all_experiments(self):
         all_results = self.run_model_comparison_experiment()

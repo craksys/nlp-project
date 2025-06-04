@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support, roc_auc_score
+from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
@@ -242,18 +242,11 @@ class BERTClassifier:
         precision, recall, f1, _ = precision_recall_fscore_support(
             y_test, y_pred, average='weighted')
         
-        # Calculate ROC AUC
-        if mode == 'without_neutral':  # Binary classification
-            roc_auc = roc_auc_score(y_test, y_pred_proba[:, 1])
-        else:  # Multi-class classification
-            roc_auc = roc_auc_score(y_test, y_pred_proba, multi_class='ovr')
-        
         metrics = {
             'accuracy': accuracy,
             'precision': precision,
             'recall': recall,
             'f1': f1,
-            'roc_auc': roc_auc,
             'classification_report': classification_report(y_test, y_pred, target_names=label_encoder.classes_)
         }
         
